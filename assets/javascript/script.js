@@ -17,34 +17,47 @@ const questionBank =[
                 a1: '.str()', a2: '.string()', a3: '.toString()', a4: '.toStr()'},
     {question: 'To comment out JavaScript code, you put _________ in front.', 
                 a1: '<!--', a2: '*/', a3: '/*', a4: '//'},
-    {question: 'If you fail to follow a <i>setInterval()</i> with _________ it will run forever.', 
+    {question: 'If you fail to follow a <i>setInterval()</i> with a _________ it will run forever.', 
                 a1: 'clearInterval()', a2: 'stopInterval()', a3: 'haltInterval()', a4: 'clearTimeout()'}
 ];
 
-//array to keep track of questions already asked?
+//array to keep track of questions asked
+var questionsAskedArr = [];
+
+//initialize randomQuestion variable
+var randomQuestion = 0;
+
+//initialize variable to track number of questions asked
+var questionsAsked = 0;
 
 //Set the stage for questions to be served
 $("#ready").click(function(){
     console.log("clicked ready");
     //Hide the introductory content
     $("#intro").hide();
-
     //Show the question content and populate question
     $("#questions").show();
     serveQuestion();
     //set timer
-
 });
 
 //begin serving questions
 function serveQuestion()
 {      
-    //only select 10 questions 
+    //only select 10 questions? 
     //randomly select a question from question bank and serve it
-    var randomQuestion = Math.floor(Math.random()*questionBank.length);
+    randomQuestion = Math.floor(Math.random()*questionBank.length);
+    //check if already asked
+    while (questionsAskedArr.includes(randomQuestion))
+    {
+        randomQuestion = Math.floor(Math.random()*questionBank.length);
+        console.log(randomQuestion);
+    };
+    //push to questions asked array - if so choose a new random number
+    questionsAskedArr.push(randomQuestion);
+    console.log(questionsAskedArr);
     //serve question
     $("#question-area").html(questionBank[randomQuestion].question);
-    //keep track of random numbers generated -> if matches one already used, generate new random number
     //serve answers (Assign random answers to random areas? how keep track of correct)
     $("#choice-1").text(questionBank[randomQuestion].a1);
     $("#choice-2").text(questionBank[randomQuestion].a2);
@@ -55,14 +68,18 @@ function serveQuestion()
 };
 
 //check answers
-function checkAnswers()
-{
+// function checkAnswers()
+// {
     //keep counter of total answered questions
     //keep counter of total right answers
     //keep track of score - time bonus?
     //if wrong subtract time from clock
     //array of buttons to check against?
-};
+    $('.choices').click(function(event){
+        console.log($(this).attr('id'));
+    });
+
+// };
 
 //calculate score
 function calculateScore()
