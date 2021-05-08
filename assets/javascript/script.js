@@ -47,7 +47,7 @@ var score = 0;
 var correctAnswers = 0;
 
 //set initial time
-var timeLeft = 100;
+var timeLeft = 10;
 
 var timer;
 
@@ -156,10 +156,15 @@ function calculateFinalScore()
     {
         $('#timer').text('0');
     }
+
+    //remove question elements
+    $("#questions").hide();
     //time remaining multiplier
     //questions answered correctly multiplier
     //use the odometer thing here?
     //Modal??
+    setTimeout(resetGame, 3000);
+
 };
 
 //use set interval / clear interval to start and stop timer
@@ -187,5 +192,21 @@ function stopTimer()
     clearInterval(timer);
 }
 
+function resetGame()
+{
+    $("#intro").show();
+}
 
+function displayScore()
+{
+    //display and save scores to local storage
+}
+
+function viewHighScores()
+{
+    //https://www.tutorialrepublic.com/faq/how-to-open-a-bootstrap-modal-window-using-jquery.php#:~:text=Answer%3A%20Use%20the%20modal(',and%20modal('toggle')%20.
+}
 //array of high scores to local storage
+$("#show").click(function(){
+    $("#game-over-modal").modal('show');
+})
