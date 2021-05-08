@@ -43,11 +43,12 @@ var questionsAnswered = 0;
 //initialize variable to keep track of score
 var score = 0;
 
-//initialize variable to keep track of correct answers
+//initialize variable to keep track of correct / incorrect answers
 var correctAnswers = 0;
+var incorrectAnswers = 0;
 
 //set initial time
-var startTime = 10;
+var startTime = 100;
 var timeLeft = startTime;
 
 var timer;
@@ -160,6 +161,7 @@ function calculateFinalScore()
 
     //time remaining multiplier
     $("#exampleModal").modal('show');
+    displayScore();
 };
 
 //use set interval / clear interval to start and stop timer
@@ -201,8 +203,16 @@ var resetGame = $(".close").click(function(){
 
 function displayScore()
 {
+    timeBonus = (timeLeft/100) * 25000;//change to be variable based on time remaining
+    score = ((correctAnswers * 1000) - (incorrectAnswers * 250)) + timeBonus;
+    console.log(score);
+
     //display and save scores to local storage
     $("#questions-answered").text(questionsAnswered);
+    $('#questions-correct').text(correctAnswers);
+    $('#questions-incorrect').text(questionsAnswered - correctAnswers);
+    $('#time-remaining').text(timeLeft);
+    $('#total-score').text(score);
 }
 
 function viewHighScores()
