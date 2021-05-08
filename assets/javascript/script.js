@@ -43,6 +43,10 @@ var questionsAnswered = 0;
 //initialize variabel to keep track of score
 score = 0;
 
+//set initial time
+var timeLeft = 10;
+
+
 //Set the stage for questions to be served
 $("#ready").click(function(){
     console.log("clicked ready");
@@ -52,11 +56,14 @@ $("#ready").click(function(){
     $("#questions").show();
     serveQuestion();
     //set timer
+    timer();
+
 });
 
 //begin serving questions
 function serveQuestion()
-{      
+{   
+    $(".card-footer").hide();   
     //only select 10 questions? 
     //randomly select a question from question bank and serve it
     randomQuestion = Math.floor(Math.random()*questionBank.length);
@@ -76,52 +83,87 @@ function serveQuestion()
     $("#choice-2").text(questionBank[randomQuestion].a2);
     $("#choice-3").text(questionBank[randomQuestion].a3);
     $("#choice-4").text(questionBank[randomQuestion].a4);
-    //delete from question bank after answer?
+
     //When reached last question, pause timer and save as high score. Then clear timer and tracker of questions asked.
 };
 
 //check answers
-// function checkAnswers()
-// {
-    //keep counter of total answered questions
-    //keep counter of total right answers
-    //keep track of score - time bonus?
-    //if wrong subtract time from clock
-    //array of buttons to check against?
-    $('.choices').click(function(event){
-        console.log($(this).attr('id'));
-        if($(this).text() === questionBank[randomQuestion].correct.toString())
+
+//keep counter of total answered questions
+//keep counter of total right answers
+//keep track of score - time bonus?
+//if wrong subtract time from clock
+//array of buttons to check against?
+$('.choices').click(function(event){
+    console.log($(this).attr('id'));
+    if($(this).text() === questionBank[randomQuestion].correct.toString())
+    {
+        score += 10;
+        questionsAnswered ++;
+        console.log(score);
+        //add answer feed back
+        $('#feedback').show();
+        $('#feedback').html("<h4>Correct!</h4>");
+    }
+    else
+    {
+        $('#feedback').show();
+        $('#feedback').html("<h4>Incorrect!</h4>");
+        //make sure there is enough time remaining to subtract 10. If not, only subtract the remaining time.
+        if(timeLeft > 10)
         {
-            score += 10;
-            questionsAnswered ++;
-            console.log(score);
+            timeLeft -= 10;
         }
         else
         {
-            score -= 100;
-            questionsAnswered ++;
-            console.log(score);
-        }
-        if(questionsAnswered < 10)
-        {
-            serveQuestion();
-        }
-        else{
-            console.log("game over");
+            timeLeft -= timeLeft;
         }
 
-    });
+        questionsAnswered ++;
+        console.log(score);
+    }
+    if(questionsAnswered < 10)
+    {
+        //pause to give feed back before showing new question
+        setTimeout(serveQuestion,500);
+    }
+    else{
+        console.log("game over");
+        calculateFinalScore();
+    }
 
-// };
+});
+
+
 
 //calculate Final Score
 function calculateFinalScore()
 {
-
+    //time remaining multiplier
+    //questions answered correctly multiplier
+    //
 };
 
 //use set interval / clear interval to start and stop timer
 function timer()
 {
-
+    //use setInterval to call update time every second.
+    var timeCount = setInterval(function(){
+        if(timeLeft > 0)
+        {
+            //set text of h2 span timer element
+            $("#timer").text(timeLeft);
+            timeLeft --;
+            console.log(timeLeft);
+        }
+        else if (timeLeft <= 0)
+        {
+            clearInterval(timeCount);
+            $("#timer").text(timeLeft);
+            console.log(timeLeft);
+        }
+        
+    }, 1000);
 };
+
+//array of high scores to local storage
