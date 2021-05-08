@@ -195,6 +195,7 @@ var resetGame = $(".close").click(function(){
     $("#questions").hide();
     $("#intro").show();
     timeLeft = startTime;
+    $("#timer").text('');
     questionsAnswered = 0;
     correctAnswers = 0;
     questionsAskedArr = [];
