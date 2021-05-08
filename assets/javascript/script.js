@@ -1,24 +1,34 @@
 const questionBank =[
     {question: 'jQuery is a framework for which of the following:', 
-                a1: 'HTML', a2: 'Python', a3: 'SQL', a4: 'JavaScript'},
+                a1: 'HTML', a2: 'Python', a3: 'SQL', a4: 'JavaScript', 
+                correct:'JavaScript'},
     {question: 'What is the correct syntax for saying Variable A is not equal to 10?', 
-                a1: 'Variable A <> 10', a2: 'Variable A not 10', a3: 'Variable A != 10', a4: 'Variable A -= 10'},
+                a1: 'Variable A <> 10', a2: 'Variable A not 10', a3: 'Variable A != 10', a4: 'Variable A -= 10', 
+                correct:'Variable A != 10'},
     {question: 'Writing "var += 1" is the same as saying:', 
-                a1: 'var = 1', a2: 'var + 1', a3: 'var + var + 1', a4: 'var is always 1'},
+                a1: 'var = 1', a2: 'var + 1', a3: 'var + var + 1', a4: 'var is always 1', 
+                correct: 'var + 1'},
     {question: 'An array is used to store multiple values in a single _________.', 
-                a1: 'variable', a2: 'element', a3: 'string', a4: 'operator'},
+                a1: 'variable', a2: 'element', a3: 'string', a4: 'operator', 
+                correct: 'variable'},
     {question: 'The .push() function is used to _________.', 
-                a1: 'Remove an item from the end of an array', a2: 'Add an item to the end of an array', a3: 'Add an item to the beginning of an array', a4: 'Remove an item from the beginning of an array'},
+                a1: 'Remove an item from the end of an array', a2: 'Add an item to the end of an array', a3: 'Add an item to the beginning of an array', a4: 'Remove an item from the beginning of an array', 
+                correct: 'Add an item to the end of an array'},
     {question: 'In: <br/><br/><i>function exampleFunc(element){};</i> <br/><br/>element is an example of a(n):', 
-                a1: 'trigger', a2: 'argument', a3: 'parameter', a4: 'type'},
+                a1: 'trigger', a2: 'argument', a3: 'parameter', a4: 'type',
+                correct: 'parameter'},
     {question: 'By default, arrays start an index of:', 
-                a1: '0', a2: '1', a3: '-1', a4: 'null'},
+                a1: '0', a2: '1', a3: '-1', a4: 'null', 
+                correct: '0'},
     {question: 'To convert a number to a string you can use:', 
-                a1: '.str()', a2: '.string()', a3: '.toString()', a4: '.toStr()'},
+                a1: '.str()', a2: '.string()', a3: '.toString()', a4: '.toStr()', 
+                correct: '.toString()'},
     {question: 'To comment out JavaScript code, you put _________ in front.', 
-                a1: '<!--', a2: '*/', a3: '/*', a4: '//'},
+                a1: '<!--', a2: '*/', a3: '/*', a4: '//', 
+                correct: '//'},
     {question: 'If you fail to follow a <i>setInterval()</i> with a _________ it will run forever.', 
-                a1: 'clearInterval()', a2: 'stopInterval()', a3: 'haltInterval()', a4: 'clearTimeout()'}
+                a1: 'clearInterval()', a2: 'stopInterval()', a3: 'haltInterval()', a4: 'clearTimeout()',
+                correct: 'clearInterval()'}
 ];
 
 //array to keep track of questions asked
@@ -28,7 +38,10 @@ var questionsAskedArr = [];
 var randomQuestion = 0;
 
 //initialize variable to track number of questions asked
-var questionsAsked = 0;
+var questionsAnswered = 0;
+
+//initialize variabel to keep track of score
+score = 0;
 
 //Set the stage for questions to be served
 $("#ready").click(function(){
@@ -77,12 +90,32 @@ function serveQuestion()
     //array of buttons to check against?
     $('.choices').click(function(event){
         console.log($(this).attr('id'));
+        if($(this).text() === questionBank[randomQuestion].correct.toString())
+        {
+            score += 10;
+            questionsAnswered ++;
+            console.log(score);
+        }
+        else
+        {
+            score -= 100;
+            questionsAnswered ++;
+            console.log(score);
+        }
+        if(questionsAnswered < 10)
+        {
+            serveQuestion();
+        }
+        else{
+            console.log("game over");
+        }
+
     });
 
 // };
 
-//calculate score
-function calculateScore()
+//calculate Final Score
+function calculateFinalScore()
 {
 
 };
