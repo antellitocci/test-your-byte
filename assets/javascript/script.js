@@ -40,11 +40,16 @@ var randomQuestion = 0;
 //initialize variable to track number of questions asked
 var questionsAnswered = 0;
 
-//initialize variabel to keep track of score
-score = 0;
+//initialize variable to keep track of score
+var score = 0;
+
+//initialize variable to keep track of correct answers
+var correctAnswers = 0;
 
 //set initial time
-var timeLeft = 10;
+var timeLeft = 100;
+
+var timer;
 
 
 //Set the stage for questions to be served
@@ -56,7 +61,7 @@ $("#ready").click(function(){
     $("#questions").show();
     serveQuestion();
     //set timer
-    timer();
+    timer = setInterval(runTimer, 1000);
 
 });
 
@@ -98,9 +103,9 @@ $('.choices').click(function(event){
     console.log($(this).attr('id'));
     if($(this).text() === questionBank[randomQuestion].correct.toString())
     {
-        score += 10;
+        correctAnswers ++;
         questionsAnswered ++;
-        console.log(score);
+        console.log(correctAnswers);
         //add answer feed back
         $('#feedback').show();
         $('#feedback').html("<h4>Correct!</h4>");
@@ -122,13 +127,15 @@ $('.choices').click(function(event){
         questionsAnswered ++;
         console.log(score);
     }
-    if(questionsAnswered < 10)
+    if(questionsAnswered < 10 && timeLeft > 0)
     {
-        //pause to give feed back before showing new question
+        //pause to give feedback before showing new question
         setTimeout(serveQuestion,500);
     }
-    else{
+    else
+    {
         console.log("game over");
+        //End game
         calculateFinalScore();
     }
 
@@ -139,31 +146,46 @@ $('.choices').click(function(event){
 //calculate Final Score
 function calculateFinalScore()
 {
+    //stop the game clock
+    stopTimer();
+    if(timeLeft > 0)
+    {
+        $('#timer').text(timeLeft);
+    }
+    else
+    {
+        $('#timer').text('0');
+    }
     //time remaining multiplier
     //questions answered correctly multiplier
-    //
+    //use the odometer thing here?
+    //Modal??
 };
 
 //use set interval / clear interval to start and stop timer
-function timer()
+//break this out
+function runTimer()
 {
-    //use setInterval to call update time every second.
-    var timeCount = setInterval(function(){
-        if(timeLeft > 0)
-        {
-            //set text of h2 span timer element
-            $("#timer").text(timeLeft);
-            timeLeft --;
-            console.log(timeLeft);
-        }
-        else if (timeLeft <= 0)
-        {
-            clearInterval(timeCount);
-            $("#timer").text(timeLeft);
-            console.log(timeLeft);
-        }
-        
-    }, 1000);
+    if(timeLeft > 0)
+    {
+        //set text of h2 span timer element
+        $("#timer").text(timeLeft);
+        timeLeft --;
+        console.log(timeLeft);
+    }
+    else if (timeLeft <= 0)
+    {
+        //End game
+        calculateFinalScore();
+        console.log(timeLeft);
+    }
+
 };
+
+function stopTimer()
+{
+    clearInterval(timer);
+}
+
 
 //array of high scores to local storage
