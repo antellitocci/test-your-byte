@@ -47,7 +47,8 @@ var score = 0;
 var correctAnswers = 0;
 
 //set initial time
-var timeLeft = 10;
+var startTime = 10;
+var timeLeft = startTime;
 
 var timer;
 
@@ -157,14 +158,8 @@ function calculateFinalScore()
         $('#timer').text('0');
     }
 
-    //remove question elements
-    $("#questions").hide();
     //time remaining multiplier
-    //questions answered correctly multiplier
-    //use the odometer thing here?
-    //Modal??
-    setTimeout(resetGame, 3000);
-
+    $("#exampleModal").modal('show');
 };
 
 //use set interval / clear interval to start and stop timer
@@ -183,6 +178,7 @@ function runTimer()
         //End game
         calculateFinalScore();
         console.log(timeLeft);
+
     }
 
 };
@@ -192,14 +188,21 @@ function stopTimer()
     clearInterval(timer);
 }
 
-function resetGame()
-{
+var resetGame = $(".close").click(function(){
+    $("#exampleModal").modal('hide');
+    $("#questions").hide();
     $("#intro").show();
-}
+    timeLeft = startTime;
+    questionsAnswered = 0;
+    correctAnswers = 0;
+    questionsAskedArr = [];
+    score = 0;
+});
 
 function displayScore()
 {
     //display and save scores to local storage
+    $("#questions-answered").text(questionsAnswered);
 }
 
 function viewHighScores()
@@ -207,6 +210,3 @@ function viewHighScores()
     //https://www.tutorialrepublic.com/faq/how-to-open-a-bootstrap-modal-window-using-jquery.php#:~:text=Answer%3A%20Use%20the%20modal(',and%20modal('toggle')%20.
 }
 //array of high scores to local storage
-$("#show").click(function(){
-    $("#game-over-modal").modal('show');
-})
