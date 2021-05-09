@@ -246,9 +246,12 @@ function displayScore()
 
 var saveScorePrompt = $("#save-score").click(function(){
     $("#game-over").modal('hide');
+    
+    //prevent the save modal from closing when clicking outside of bounds
+    $("#save-modal").modal({backdrop: 'static', keyboard: false});
     $("#save-modal").modal('show');
     $('#total-score-save').html($('#total-score').html());
-    $("#rating-save").html("<b>Powerhouse</b>");
+    $("#rating-save").html("<b>" + playerRating + "</b>");
 })
 
 //save high score to local storage
