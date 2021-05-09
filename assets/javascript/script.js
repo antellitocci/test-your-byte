@@ -42,7 +42,8 @@ var questionsAnswered = 0;
 
 //initialize variable to keep track of score & player rating
 var score = 0;
-var playerRatingArr = ['Novice', 'Apprentice', 'Journeyman', 'Master', 'JavaScript Maestro']; 
+var playerRatingArr = ['Novice', 'Apprentice', 'Journeyman', 'Master', 'JavaScript Maestro'];
+var playerRating = ''; 
 
 //initialize variable to keep track of correct / incorrect answers
 var correctAnswers = 0;
@@ -163,7 +164,30 @@ function calculateFinalScore()
     //calculate final score and rating
     timeBonus = (timeLeft/100) * 25000;//change to be variable based on time remaining
     score = ((correctAnswers * 1000) - (incorrectAnswers * 250)) + timeBonus;
+    if (score <=5000)
+    {
+        playerRating = playerRatingArr[0];
+        console.log(playerRating);
+    }
+    else if (score > 5000 && score <= 10000)
+    {
+        playerRating = playerRatingArr[1];
+    }
+    else if (score > 10000 && score <= 20000)
+    {
+        playerRating = playerRatingArr[2];
+    }
+    else if (score > 20000 && score <= 30000)
+    {
+        playerRating = playerRatingArr[3];
+    }
+    else
+    {
+        playerRating = playerRatingArr[4];
+    }
     console.log(score);
+
+
     displayScore();
 };
 
@@ -211,21 +235,13 @@ function resetGame()
 
 function displayScore()
 {
-
-    //add rating scale
-
     //display and save scores to local storage
     $("#questions-answered").text(questionsAnswered);
     $('#questions-correct').text(correctAnswers);
     $('#questions-incorrect').text(incorrectAnswers);
     $('#time-remaining').text(timeLeft);
     $('#total-score').html("<b>" + score + "</b>");
-    $("#rating").html("<b>Powerhouse</b>");
-}
-
-function viewHighScores()
-{
-    //https://www.tutorialrepublic.com/faq/how-to-open-a-bootstrap-modal-window-using-jquery.php#:~:text=Answer%3A%20Use%20the%20modal(',and%20modal('toggle')%20.
+    $("#rating").html("<b>" + playerRating + "</b>");
 }
 
 var saveScorePrompt = $("#save-score").click(function(){
@@ -246,6 +262,7 @@ $("#save-hs").submit(function(event){
         var highScore = {
             player: playerName,
             p_score: score,
+            p_rating: playerRating
          };
     
         highScores.push(highScore);
@@ -255,40 +272,39 @@ $("#save-hs").submit(function(event){
         $('#initials').val('');
         resetGame();
     }
-    else
-    {
-        window.alert("please add your initials before submitting");
-    }
-
-})
+});
 
 function loadHighScores()
 {
+    //sort the high scores array in descending order by score (highest at top)
+    highScores.sort(function(a,b){return b.p_score - a.p_score});
+
+    //loop through the high scores array and pull out each object's information
     $.each(highScores, function(arr, object){
         console.log(arr, object);
-        createHighScoreListing(object.player, object.p_score);
+        createHighScoreListing(object.player, object.p_score, object.p_rating);
     });
 }
 
-function createHighScoreListing(p_name, p_score)
+function createHighScoreListing(p_name, p_score, p_rating)
 {
     var scoreLi = $("<li>")
         .addClass("list-group-item d-flex justify-content-between align-items-start");
-    var scoreLiMainDiv = $("<div>").addClass("ms-2 me auto");
+    var scoreLiMainDiv = $("<div>").addClass("ms-2 me-auto");
     var scorePNameDiv = $("<div>")
         .addClass("fw-bold")
         .text(p_name);
     var scorePScoreDiv =$("<div>").text(p_score);
-    // var scorePRatingSpan = $("<span>")
-    //     .class("badge bg-primary")
-    //     .text(p_rating);
+    var scorePRatingSpan = $("<span>")
+        .addClass("badge bg-primary")
+        .text(p_rating);
 
     //append items in the correct order then add to ol in HTML modal
     //append player name and player score to main div
     scoreLiMainDiv.append(scorePNameDiv, scorePScoreDiv);
 
     //append main div and span to li item
-    scoreLi.append(scoreLiMainDiv);
+    scoreLi.append(scoreLiMainDiv, scorePRatingSpan);
 
     //append li to ol item in modal for high scores
     $("#high-scores-ol").append(scoreLi);
@@ -297,6 +313,7 @@ function createHighScoreListing(p_name, p_score)
 function saveHighScores()
 {
     localStorage.setItem('highScores', JSON.stringify(highScores));
+    //loadHighScores();
 }
 
 //sort array largest to smallest when printing to screen
@@ -313,6 +330,7 @@ $("#high-scores").click(function(){
 $("#hs-clear").on("click", function() {
     highScores = [];
     saveHighScores();
+    $("#high-scores-ol").empty();
 });
 
 loadHighScores();
