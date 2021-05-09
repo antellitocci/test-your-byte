@@ -28,7 +28,16 @@ const questionBank =[
                 correct: '//'},
     {question: 'If you fail to follow a <i>setInterval()</i> with a _________ it will run forever.', 
                 a1: 'clearInterval()', a2: 'stopInterval()', a3: 'haltInterval()', a4: 'clearTimeout()',
-                correct: 'clearInterval()'}
+                correct: 'clearInterval()'},
+    {question: 'If an array contains 5 total items, which item will be returned at array[3]?', 
+                a1: 'The First', a2: 'The Second', a3: 'The Third', a4: 'The Fourth', 
+                correct: 'The Fourth'},
+    {question: 'Which of the following is won\'t throw an error?', 
+                a1: 'window.alert(Hello World!);', a2: 'window.alert("Hello World!");', a3: 'window.alert("Hello World"!)', a4: 'window.alert("Hello World!);', 
+                correct: 'window.alert("Hello World!");'},
+    {question: 'Which is the correct "if" statement to execute code if "x" is equal to 46', 
+                a1: 'if(x==46)', a2: 'if(x,46)', a3: 'if(x=46)', a4: 'if(x!=46)', 
+                correct: 'if(x==46)'}
 ];
 
 //array to keep track of questions asked
@@ -158,7 +167,8 @@ function calculateFinalScore()
         $('#timer').text('0');
     }
 
-    //show game over modal
+    //show game over modal & prevent from closing when clicking outside of bounds
+    $("#game-over").modal({backdrop: 'static', keyboard: false});
     $("#game-over").modal('show');
 
     //calculate final score and rating
@@ -246,7 +256,7 @@ function displayScore()
 
 var saveScorePrompt = $("#save-score").click(function(){
     $("#game-over").modal('hide');
-    
+
     //prevent the save modal from closing when clicking outside of bounds
     $("#save-modal").modal({backdrop: 'static', keyboard: false});
     $("#save-modal").modal('show');
