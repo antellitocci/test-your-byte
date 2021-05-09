@@ -49,21 +49,21 @@ var randomQuestion = 0;
 //initialize variable to track number of questions asked
 var questionsAnswered = 0;
 
-//initialize variable to keep track of score & player rating
-var score = 0;
-var playerRatingArr = ['Novice', 'Apprentice', 'Journeyman', 'Master', 'JavaScript Maestro'];
-var playerRating = ''; 
-
 //initialize variable to keep track of correct / incorrect answers
 var correctAnswers = 0;
 var incorrectAnswers = 0;
+
+//initialize variable to keep track of score & player rating
+var score = 0;
+var playerRatingArr = ['Novice', 'Apprentice', 'Journeyman', 'Master', 'Grandmaster'];
+var playerRating = ''; 
 
 //set initial time
 var startTime = 100;
 var timeLeft = startTime;
 var timer;
 
-//initialize high score array
+//initialize high score array or set to empty if none in local storage
 var highScores = JSON.parse(localStorage.getItem('highScores')) || [];
 
 
@@ -145,7 +145,7 @@ $('.choices').click(function(event){
     else
     {
         console.log("game over");
-        //End game
+        //End game & calculate score
         calculateFinalScore();
     }
 
@@ -182,18 +182,22 @@ function calculateFinalScore()
     else if (score > 5000 && score <= 10000)
     {
         playerRating = playerRatingArr[1];
+        console.log(playerRating);
     }
     else if (score > 10000 && score <= 20000)
     {
         playerRating = playerRatingArr[2];
+        console.log(playerRating);
     }
     else if (score > 20000 && score <= 30000)
     {
         playerRating = playerRatingArr[3];
+        console.log(playerRating);
     }
     else
     {
         playerRating = playerRatingArr[4];
+        console.log(playerRating);
     }
     console.log(score);
 
@@ -245,7 +249,7 @@ function resetGame()
 
 function displayScore()
 {
-    //display and save scores to local storage
+    //display scores to user
     $("#questions-answered").text(questionsAnswered);
     $('#questions-correct').text(correctAnswers);
     $('#questions-incorrect').text(incorrectAnswers);
@@ -273,9 +277,9 @@ $("#save-hs").submit(function(event){
     if(playerName !== "")
     {
         var highScore = {
-            player: playerName,
-            p_score: score,
-            p_rating: playerRating
+            p_Name: playerName,
+            p_Score: score,
+            p_Rating: playerRating
          };
     
         highScores.push(highScore);
@@ -290,27 +294,27 @@ $("#save-hs").submit(function(event){
 function loadHighScores()
 {
     //sort the high scores array in descending order by score (highest at top)
-    highScores.sort(function(a,b){return b.p_score - a.p_score});
+    highScores.sort(function(a,b){return b.p_Score - a.p_Score});
 
     //loop through the high scores array and pull out each object's information
     $.each(highScores, function(arr, object){
         console.log(arr, object);
-        createHighScoreListing(object.player, object.p_score, object.p_rating);
+        createHighScoreListing(object.p_Name, object.p_Score, object.p_Rating);
     });
 }
 
-function createHighScoreListing(p_name, p_score, p_rating)
+function createHighScoreListing(p_Name, p_Score, p_Rating)
 {
     var scoreLi = $("<li>")
         .addClass("list-group-item d-flex justify-content-between align-items-start");
     var scoreLiMainDiv = $("<div>").addClass("ms-2 me-auto");
     var scorePNameDiv = $("<div>")
         .addClass("fw-bold")
-        .text(p_name);
-    var scorePScoreDiv =$("<div>").text(p_score);
+        .text(p_Name);
+    var scorePScoreDiv =$("<div>").text(p_Score);
     var scorePRatingSpan = $("<span>")
         .addClass("badge bg-primary")
-        .text(p_rating);
+        .text(p_Rating);
 
     //append items in the correct order then add to ol in HTML modal
     //append player name and player score to main div
@@ -329,18 +333,19 @@ function saveHighScores()
     //loadHighScores();
 }
 
-//sort array largest to smallest when printing to screen
-
-//capture button clicks to perform various functions
-
 //Show high scores
 $("#high-scores").click(function(){
     $("#scores-modal").modal('show');
 })
 
+//Close high scores
+$("#hs-close").click(function(){
+    $("#scores-modal").modal('hide');
+});
+
+
 //Clear all high scores
-// remove all tasks
-$("#hs-clear").on("click", function() {
+$("#hs-clear").click(function() {
     highScores = [];
     saveHighScores();
     $("#high-scores-ol").empty();
