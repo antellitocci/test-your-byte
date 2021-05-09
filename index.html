@@ -7,8 +7,7 @@
     <title>Test Your Byte</title>
     <!--favicon-->
     <link rel="icon" type="image/png" href="assets/images/test your byte logo.png">
-    <!--Personal Style Sheet-->
-    <link href="assets/css/style.css" rel="stylesheet">
+
     <!--Import Bootstrap Style Sheet-->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-wEmeIV1mKuiNpC+IOBjI7aAzPcEZeedi5yW5f2yOq55WWLwNGmvvx4Um1vskeMj0" crossorigin="anonymous">
     
@@ -26,21 +25,21 @@
         <!-- Header Area -->
         <div class="row justify-content-between mt-4">
             <div class="col-4">
-                <button type="button" class="btn btn-info" id="high-scores"><h5>High Scores</h5></button>
+                <button type="button" class="btn btn-info" id="high-scores"><b>High Scores</b></button>
             </div>
             <div class="col-2">
-                <h4>Time: <span id="timer"></span></h4>
+                <h4><span id="timer"></span></h4>
             </div>
         </div>
         <!--Intro Content-->
         <div class="row justify-content-center mt-5" id="intro">
-            <div class="card col-6" style="border: none;">
+            <div class="card w-75" style="border: none;">
                 <div class="card-body">
                     <h3 class="card-title" style="text-align: center;">Coding Quiz</h3>
                     <div style="text-align: center;">
                         <p>Welcome to the <b><i>Test Your Byte</i></b> Coding Quiz!</p>
-                        <p>Test your JavaScript knowledge by trying to answer the following questions within the time limit.
-                            Go as fast as you can, but, bear in mind, an incorrect answer will reduce your time remaining by ten seconds!
+                        <p>Test your JavaScript knowledge by trying to answer the following questions within the 60 second time limit.
+                            Go as fast as you can, but, bear in mind, an incorrect answer will reduce your time remaining by fifteen seconds!
                         </p>
                         <p>Click the button below if you're ready to <b><i>Test. Your. Byte.</i></b></p>
                         <button type="button" class="btn btn-primary btn-lg" id="ready">I'm Ready!</button>
@@ -172,15 +171,16 @@
     <div class="modal fade" id="scores-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
-                <div class="modal-header">
+                <div class="modal-header" style="justify-content: center;">
                     <h3 class="modal-title" id="high-scores-modal">Wall of Champions</h3>
                 </div>
                 <div class="modal-body">
                     <ol class="list-group list-group-numbered" id="high-scores-ol">
+                        <!--Easter Egg Always Present in High Score List-->
                         <li class="list-group-item d-flex justify-content-between align-items-start">
                             <div class ="ms-2 me-auto">
                                 <div class="fw-bold">AAA</div>
-                                <div>46000</div>
+                                <div>30010</div>
                             </div>
                             <span class="badge bg-warning" id="raddymaster">The Raddymaster</span>
                         </li>

@@ -46,7 +46,10 @@ var questionsAskedArr = [];
 //initialize randomQuestion variable
 var randomQuestion = 0;
 
-//initialize variable to track number of questions asked
+//initialize variable to give game # of questions to ask
+var questionsToAsk = 10;
+
+//initialize variable to track number of questions answered
 var questionsAnswered = 0;
 
 //initialize variable to keep track of correct / incorrect answers
@@ -59,8 +62,9 @@ var playerRatingArr = ['Novice', 'Apprentice', 'Journeyman', 'Master', 'Grandmas
 var playerRating = ''; 
 
 //set initial time
-var startTime = 100;
+var startTime = 60;
 var timeLeft = startTime;
+var timePenalty = 15; //set penalty for answering questions incorrectly
 var timer;
 
 //initialize high score array or set to empty if none in local storage
@@ -69,13 +73,12 @@ var highScores = JSON.parse(localStorage.getItem('highScores')) || [];
 
 //Set the stage for questions to be served when 'I'm Ready!" button is clicked
 $("#ready").click(function(){
-    console.log("clicked ready");
     //Hide the introductory content
     $("#intro").hide();
-    //Show the question content and populate question
+    //Show the question area content and populate question
     $("#questions").show();
     serveQuestion();
-    //set timer
+    //set timer to run every 1 second
     timer = setInterval(runTimer, 1000);
 });
 
@@ -88,20 +91,21 @@ function serveQuestion()
     //randomly select a question from question bank
     randomQuestion = Math.floor(Math.random()*questionBank.length);
 
-    //check if already asked
+    //check if selected question already asked
     while (questionsAskedArr.includes(randomQuestion))
     {
+        //if already asked, continue to search for a random number that hasn't been asked
         randomQuestion = Math.floor(Math.random()*questionBank.length);
         console.log(randomQuestion);
     };
 
-    //push to questions asked array - if so choose a new random number
+    //push to questions asked array - to log all questions asked already to avoid duplicates
     questionsAskedArr.push(randomQuestion);
     console.log(questionsAskedArr);
 
     //serve question
     $("#question-area").html(questionBank[randomQuestion].question);
-    //serve answers
+    //serve answer choices
     $("#choice-1").text(questionBank[randomQuestion].a1);
     $("#choice-2").text(questionBank[randomQuestion].a2);
     $("#choice-3").text(questionBank[randomQuestion].a3);
@@ -110,36 +114,41 @@ function serveQuestion()
 
 //check answers
 $('.choices').click(function(event){
+    //log id of button clicked for QA testing
     console.log($(this).attr('id'));
+    //Check if the text content of the selected button is the correct answer
     if($(this).text() === questionBank[randomQuestion].correct.toString())
     {
+        //If it is correct answer, +1 to correct answers and questions asked
         correctAnswers ++;
         questionsAnswered ++;
-        console.log(correctAnswers);
-        //add answer feed back
+        //Let user know they were correct
         $('#feedback').show();
         $('#feedback').html("<h4>Correct!</h4>");
     }
     else
     {
+        //If incorrect answer, +1 to incorrect answers and questions asked
+        incorrectAnswers ++;
+        questionsAnswered ++;
+        //Let user know they were incorrect
         $('#feedback').show();
         $('#feedback').html("<h4>Incorrect!</h4>");
-        //make sure there is enough time remaining to subtract 10. If not, only subtract the remaining time.
-        if(timeLeft > 10)
+        //make sure there is enough time remaining to subtract the timePenalty. If not, only subtract the remaining time.
+        if(timeLeft > timePenalty)
         {
-            timeLeft -= 10;
+            timeLeft -= timePenalty;
         }
         else
         {
             timeLeft -= timeLeft;
         }
-
-        questionsAnswered ++;
-        console.log(score);
     }
-    if(questionsAnswered < 10 && timeLeft > 0)
+
+    //Get ready to serve the next question
+    if(questionsAnswered < questionsToAsk && timeLeft > 0)
     {
-        //pause to give feedback before showing new question
+        //pause to show feedback before showing new question
         setTimeout(serveQuestion,500);
     }
     else
@@ -151,12 +160,10 @@ $('.choices').click(function(event){
 
 });
 
-
-
 //calculate Final Score
 function calculateFinalScore()
 {
-    //stop the game clock
+    //stop the game clock and freeze time counter appropriately
     stopTimer();
     if(timeLeft > 0)
     {
@@ -164,7 +171,7 @@ function calculateFinalScore()
     }
     else
     {
-        $('#timer').text('0');
+        $('#timer').text('Time: 0');
     }
 
     //show game over modal & prevent from closing when clicking outside of bounds
@@ -172,24 +179,24 @@ function calculateFinalScore()
     $("#game-over").modal('show');
 
     //calculate final score and rating
-    timeBonus = (timeLeft/100) * 25000;//change to be variable based on time remaining
+    timeBonus = (timeLeft/100) * 30000;//change to be variable based on time remaining
     score = ((correctAnswers * 1000) - (incorrectAnswers * 250)) + timeBonus;
-    if (score <=5000)
+    if (score <=2500)
     {
         playerRating = playerRatingArr[0];
         console.log(playerRating);
     }
-    else if (score > 5000 && score <= 10000)
+    else if (score > 2500 && score <= 5000)
     {
         playerRating = playerRatingArr[1];
         console.log(playerRating);
     }
-    else if (score > 10000 && score <= 20000)
+    else if (score > 5000 && score <= 10000)
     {
         playerRating = playerRatingArr[2];
         console.log(playerRating);
     }
-    else if (score > 20000 && score <= 30000)
+    else if (score > 10000 && score <= 20000)
     {
         playerRating = playerRatingArr[3];
         console.log(playerRating);
@@ -199,26 +206,36 @@ function calculateFinalScore()
         playerRating = playerRatingArr[4];
         console.log(playerRating);
     }
-    console.log(score);
 
-
+    //Display the user's final score
     displayScore();
 };
 
-//use set interval / clear interval to start and stop timer
-//break this out
+//Display score to user
+function displayScore()
+{
+    //display scores to user
+    $("#questions-answered").text(questionsAnswered);
+    $('#questions-correct').text(correctAnswers);
+    $('#questions-incorrect').text(incorrectAnswers);
+    $('#time-remaining').text(timeLeft);
+    $('#total-score').html("<b>" + score + "</b>");
+    $("#rating").html("<b>" + playerRating + "</b>");
+};
+
+//function to handle the timer updates
 function runTimer()
 {
     if(timeLeft > 0)
     {
         //set text of h2 span timer element
-        $("#timer").text(timeLeft);
+        $("#timer").text("Time: " + timeLeft);
         timeLeft --;
         console.log(timeLeft);
     }
     else if (timeLeft <= 0)
     {
-        //End game
+        //End game if time runs out
         calculateFinalScore();
         console.log(timeLeft);
 
@@ -229,8 +246,9 @@ function runTimer()
 function stopTimer()
 {
     clearInterval(timer);
-}
+};
 
+//Reset game and tracking variables (does not reset high scores)
 $(".close").click(resetGame);
 
 function resetGame()
@@ -242,22 +260,13 @@ function resetGame()
     timeLeft = startTime;
     $("#timer").text('');
     questionsAnswered = 0;
+    incorrectAnswers = 0;
     correctAnswers = 0;
     questionsAskedArr = [];
     score = 0;
-}
+};
 
-function displayScore()
-{
-    //display scores to user
-    $("#questions-answered").text(questionsAnswered);
-    $('#questions-correct').text(correctAnswers);
-    $('#questions-incorrect').text(incorrectAnswers);
-    $('#time-remaining').text(timeLeft);
-    $('#total-score').html("<b>" + score + "</b>");
-    $("#rating").html("<b>" + playerRating + "</b>");
-}
-
+//Prompt user to enter intials and save their high score if they would like
 var saveScorePrompt = $("#save-score").click(function(){
     $("#game-over").modal('hide');
 
@@ -266,9 +275,9 @@ var saveScorePrompt = $("#save-score").click(function(){
     $("#save-modal").modal('show');
     $('#total-score-save').html($('#total-score').html());
     $("#rating-save").html("<b>" + playerRating + "</b>");
-})
+});
 
-//save high score to local storage
+//save player high score information then push to local storage
 $("#save-hs").submit(function(event){
     //get input from input box
     var playerName = $('#initials').val().trim();
@@ -276,14 +285,16 @@ $("#save-hs").submit(function(event){
     //ensure player inputs their initials
     if(playerName !== "")
     {
+        //create the user's high score. store name, score, and rating
         var highScore = {
             p_Name: playerName,
             p_Score: score,
             p_Rating: playerRating
          };
-    
-        highScores.push(highScore);
         
+        //push score to high scores array
+        highScores.push(highScore);
+        //Save to local storage
         saveHighScores();
         
         $('#initials').val('');
@@ -301,10 +312,11 @@ function loadHighScores()
         console.log(arr, object);
         createHighScoreListing(object.p_Name, object.p_Score, object.p_Rating);
     });
-}
+};
 
 function createHighScoreListing(p_Name, p_Score, p_Rating)
 {
+    //create list item with appropriate children for list group of high scores
     var scoreLi = $("<li>")
         .addClass("list-group-item d-flex justify-content-between align-items-start");
     var scoreLiMainDiv = $("<div>").addClass("ms-2 me-auto");
@@ -312,9 +324,31 @@ function createHighScoreListing(p_Name, p_Score, p_Rating)
         .addClass("fw-bold")
         .text(p_Name);
     var scorePScoreDiv =$("<div>").text(p_Score);
-    var scorePRatingSpan = $("<span>")
-        .addClass("badge bg-primary")
-        .text(p_Rating);
+    //create and set initial class of <span> element holding player rating
+    var scorePRatingSpan = $("<span>").addClass("badge");
+    //create the color of the <span> element based on player rating
+    if(p_Rating == playerRatingArr[0])
+    {
+        scorePRatingSpan.addClass("bg-danger");
+    }
+    else if (p_Rating == playerRatingArr[1])
+    {
+        scorePRatingSpan.addClass("bg-success");
+    }
+    else if (p_Rating == playerRatingArr[2])
+    {
+        scorePRatingSpan.addClass("bg-primary");
+    }
+    else if (p_Rating == playerRatingArr[3])
+    {
+        scorePRatingSpan.addClass("bg-secondary");
+    }
+    else
+    {
+        scorePRatingSpan.addClass("bg-dark");
+    }
+    
+        scorePRatingSpan.text(p_Rating);
 
     //append items in the correct order then add to ol in HTML modal
     //append player name and player score to main div
@@ -325,30 +359,30 @@ function createHighScoreListing(p_Name, p_Score, p_Rating)
 
     //append li to ol item in modal for high scores
     $("#high-scores-ol").append(scoreLi);
-}
-
+};
+//save high scores to local storage
 function saveHighScores()
 {
     localStorage.setItem('highScores', JSON.stringify(highScores));
-    //loadHighScores();
-}
+};
 
 //Show high scores
 $("#high-scores").click(function(){
     $("#scores-modal").modal('show');
-})
+});
 
 //Close high scores
 $("#hs-close").click(function(){
     $("#scores-modal").modal('hide');
 });
 
-
 //Clear all high scores
 $("#hs-clear").click(function() {
     highScores = [];
     saveHighScores();
+    //empty the high scores list. The raddymaster easter egg will always re-load after page refresh
     $("#high-scores-ol").empty();
 });
 
+//load high scores by default. Will create an empty array if none exist
 loadHighScores();
