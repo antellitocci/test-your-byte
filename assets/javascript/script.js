@@ -57,7 +57,7 @@ var timer;
 var highScores = JSON.parse(localStorage.getItem('highScores')) || [];
 
 
-//Set the stage for questions to be served
+//Set the stage for questions to be served when 'I'm Ready!" button is clicked
 $("#ready").click(function(){
     console.log("clicked ready");
     //Hide the introductory content
@@ -67,43 +67,38 @@ $("#ready").click(function(){
     serveQuestion();
     //set timer
     timer = setInterval(runTimer, 1000);
-
 });
 
 //begin serving questions
 function serveQuestion()
 {   
+    //Hide feedback from previous question
     $(".card-footer").hide();   
-    //only select 10 questions? 
-    //randomly select a question from question bank and serve it
+
+    //randomly select a question from question bank
     randomQuestion = Math.floor(Math.random()*questionBank.length);
+
     //check if already asked
     while (questionsAskedArr.includes(randomQuestion))
     {
         randomQuestion = Math.floor(Math.random()*questionBank.length);
         console.log(randomQuestion);
     };
+
     //push to questions asked array - if so choose a new random number
     questionsAskedArr.push(randomQuestion);
     console.log(questionsAskedArr);
+
     //serve question
     $("#question-area").html(questionBank[randomQuestion].question);
-    //serve answers (Assign random answers to random areas? how keep track of correct)
+    //serve answers
     $("#choice-1").text(questionBank[randomQuestion].a1);
     $("#choice-2").text(questionBank[randomQuestion].a2);
     $("#choice-3").text(questionBank[randomQuestion].a3);
     $("#choice-4").text(questionBank[randomQuestion].a4);
-
-    //When reached last question, pause timer and save as high score. Then clear timer and tracker of questions asked.
 };
 
 //check answers
-
-//keep counter of total answered questions
-//keep counter of total right answers
-//keep track of score - time bonus?
-//if wrong subtract time from clock
-//array of buttons to check against?
 $('.choices').click(function(event){
     console.log($(this).attr('id'));
     if($(this).text() === questionBank[randomQuestion].correct.toString())
@@ -233,8 +228,6 @@ function viewHighScores()
     //https://www.tutorialrepublic.com/faq/how-to-open-a-bootstrap-modal-window-using-jquery.php#:~:text=Answer%3A%20Use%20the%20modal(',and%20modal('toggle')%20.
 }
 
-
-
 var saveScorePrompt = $("#save-score").click(function(){
     $("#game-over").modal('hide');
     $("#save-modal").modal('show');
@@ -243,19 +236,83 @@ var saveScorePrompt = $("#save-score").click(function(){
 })
 
 //save high score to local storage
-$("#save-hs").click(function(){
-    var playerName = $('#initials').val();
+$("#save-hs").submit(function(event){
     //get input from input box
-    var highScore = {
-        player: playerName,
-        p_score: score,
-     };
+    var playerName = $('#initials').val().trim();
 
-    highScores.push(highScore);
+    //ensure player inputs their initials
+    if(playerName !== "")
+    {
+        var highScore = {
+            player: playerName,
+            p_score: score,
+         };
     
-    localStorage.setItem('highScores', JSON.stringify(highScores));
+        highScores.push(highScore);
+        
+        saveHighScores();
+        
+        $('#initials').val('');
+        resetGame();
+    }
+    else
+    {
+        window.alert("please add your initials before submitting");
+    }
 
-    resetGame();
 })
 
-//array of high scores to local storage
+function loadHighScores()
+{
+    $.each(highScores, function(arr, object){
+        console.log(arr, object);
+        createHighScoreListing(object.player, object.p_score);
+    });
+}
+
+function createHighScoreListing(p_name, p_score)
+{
+    var scoreLi = $("<li>")
+        .addClass("list-group-item d-flex justify-content-between align-items-start");
+    var scoreLiMainDiv = $("<div>").addClass("ms-2 me auto");
+    var scorePNameDiv = $("<div>")
+        .addClass("fw-bold")
+        .text(p_name);
+    var scorePScoreDiv =$("<div>").text(p_score);
+    // var scorePRatingSpan = $("<span>")
+    //     .class("badge bg-primary")
+    //     .text(p_rating);
+
+    //append items in the correct order then add to ol in HTML modal
+    //append player name and player score to main div
+    scoreLiMainDiv.append(scorePNameDiv, scorePScoreDiv);
+
+    //append main div and span to li item
+    scoreLi.append(scoreLiMainDiv);
+
+    //append li to ol item in modal for high scores
+    $("#high-scores-ol").append(scoreLi);
+}
+
+function saveHighScores()
+{
+    localStorage.setItem('highScores', JSON.stringify(highScores));
+}
+
+//sort array largest to smallest when printing to screen
+
+//capture button clicks to perform various functions
+
+//Show high scores
+$("#high-scores").click(function(){
+    $("#scores-modal").modal('show');
+})
+
+//Clear all high scores
+// remove all tasks
+$("#hs-clear").on("click", function() {
+    highScores = [];
+    saveHighScores();
+});
+
+loadHighScores();
