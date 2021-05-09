@@ -70,60 +70,60 @@
     <!-- Game Over Modal -->
     <div class="modal fade" id="game-over" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-            <h5 class="modal-title" id="game-over-modal">Game Over! Let's See How You Did!</h5>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="game-over-modal">Game Over. How'd you do?</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-6">
+                            <h6>Questions Answered:</h6>
+                        </div>
+                        <div class="col-6" id="questions-answered">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <h6>Questions Correct:</h6>
+                        </div>
+                        <div class="col-6" id="questions-correct">
+                        </div>
+                     </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <h6>Questions Incorrect:</h6>
+                        </div>
+                        <div class="col-6" id="questions-incorrect">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <h6>Time Remaining:</h6>
+                        </div>
+                        <div class="col-6" id="time-remaining">
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <div class="col-6">
+                            <h6><b>Total Score:</b></h6>
+                        </div>
+                        <div class="col-6" id="total-score">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <h6><b>Rating:</b></h6>
+                        </div>
+                        <div class="col-6" id="rating">
+                        </div>
+                    </div>             
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary close">Exit</button>
+                    <button type="button" class="btn btn-primary" id="save-score">Save High Score</button>
+                </div>
             </div>
-            <div class="modal-body">
-            <div class="row">
-                <div class="col-6">
-                    <h6>Questions Answered:</h6>
-                </div>
-                <div class="col-6" id="questions-answered">
-                </div>
-                </div>
-                <div class="row">
-                    <div class="col-6">
-                        <h6>Questions Correct:</h6>
-                    </div>
-                    <div class="col-6" id="questions-correct">
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-6">
-                        <h6>Questions Incorrect:</h6>
-                    </div>
-                    <div class="col-6" id="questions-incorrect">
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-6">
-                        <h6>Time Remaining:</h6>
-                    </div>
-                    <div class="col-6" id="time-remaining">
-                    </div>
-                </div>
-                <hr />
-                <div class="row">
-                    <div class="col-6">
-                        <h6><b>Total Score:</b></h6>
-                    </div>
-                    <div class="col-6" id="total-score">
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-6">
-                        <h6><b>Rating:</b></h6>
-                    </div>
-                    <div class="col-6" id="rating">
-                    </div>
-                </div>             
-            </div>
-            <div class="modal-footer">
-            <button type="button" class="btn btn-secondary close">Exit</button>
-            <button type="button" class="btn btn-primary" id="save-score">Save High Score</button>
-            </div>
-        </div>
         </div>
     </div>
 
@@ -132,7 +132,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                <h5 class="modal-title" id="save-score-modal">Save Your High Score</h5>
+                    <h5 class="modal-title" id="save-score-modal">Save Your High Score</h5>
                 </div>
                 <div class="modal-body">
                     <div class="row">
@@ -141,6 +141,7 @@
                         </div>
                         <div class="col-6" id="total-score-save">
                         </div>
+                    </div>
                     <div class="row">
                         <div class="col-6">
                             <h6><b>Rating:</b></h6>
@@ -148,18 +149,17 @@
                         <div class="col-6" id="rating-save">
                         </div>
                     </div>
-                    </div>
                     <div class="row">
                         <div class="col-12">
                             <h6>Enter Your Initials:</h6>
                         </div>
                         <div class="col-12">
                             <form id="save-hs">
-                            <div class="input-group mb-3">
-                                <input type="text" class="form-control" placeholder="Initials" aria-label="Initials" aria-describedby="save-hs" id="initials" maxlength="3" required>
-                                <button class="btn btn-success" type="submit">Save</button>
-                            </div>
-                        </form>
+                                <div class="input-group mb-3">
+                                    <input type="text" class="form-control" placeholder="Initials" aria-label="Initials" aria-describedby="save-hs" id="initials" maxlength="3" required>
+                                    <button class="btn btn-success" type="submit">Save</button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -187,8 +187,8 @@
                     </ol>
                 </div>
                 <div class="modal-footer">
-                <button type="button" class="btn btn-danger" id="hs-clear">Reset High Scores</button>
-                <button type="button" class="btn btn-primary" id="hs-close">Close</button>
+                    <button type="button" class="btn btn-danger" id="hs-clear">Reset High Scores</button>
+                    <button type="button" class="btn btn-primary" id="hs-close">Close</button>
                 </div>
             </div>
         </div>

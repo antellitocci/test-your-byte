@@ -35,9 +35,21 @@ const questionBank =[
     {question: 'Which of the following is won\'t throw an error?', 
                 a1: 'window.alert(Hello World!);', a2: 'window.alert("Hello World!");', a3: 'window.alert("Hello World"!)', a4: 'window.alert("Hello World!);', 
                 correct: 'window.alert("Hello World!");'},
-    {question: 'Which is the correct "if" statement to execute code if "x" is equal to 46', 
+    {question: 'Which is the correct "if" statement to execute code if "x" is equal to 46?', 
                 a1: 'if(x==46)', a2: 'if(x,46)', a3: 'if(x=46)', a4: 'if(x!=46)', 
-                correct: 'if(x==46)'}
+                correct: 'if(x==46)'},
+    {question: 'Which function can remove items from an array?', 
+                a1: '.unshift()', a2: '.push()', a3: '.splice()', a4: '.concat()', 
+                correct: '.splice()'},
+    {question: 'In an array: arr  = ["red", "green", "blue", "yellow"], how do we reference the 2nd item?', 
+                a1: 'arr[2]', a2: 'arr[1]', a3: 'arr[0]', a4: 'arr[3]', 
+                correct: 'arr[1]'},
+    {question: 'console.log() is useful for?', 
+                a1: 'Providing user feedback', a2: 'Passing variables to other functions', a3: 'Adding elements to HTML console', a4: 'Debugging', 
+                correct: 'Debugging'},
+    {question: 'If var feedback = "Good Job", console.log(feedback); will print what?', 
+                a1: 'feedback', a2: 'Good Job', a3: '"Good Job"', a4: 'Null', 
+                correct: 'Good Job'}
 ];
 
 //array to keep track of questions asked
@@ -96,12 +108,10 @@ function serveQuestion()
     {
         //if already asked, continue to search for a random number that hasn't been asked
         randomQuestion = Math.floor(Math.random()*questionBank.length);
-        console.log(randomQuestion);
     };
 
     //push to questions asked array - to log all questions asked already to avoid duplicates
     questionsAskedArr.push(randomQuestion);
-    console.log(questionsAskedArr);
 
     //serve question
     $("#question-area").html(questionBank[randomQuestion].question);
@@ -114,8 +124,6 @@ function serveQuestion()
 
 //check answers
 $('.choices').click(function(event){
-    //log id of button clicked for QA testing
-    console.log($(this).attr('id'));
     //Check if the text content of the selected button is the correct answer
     if($(this).text() === questionBank[randomQuestion].correct.toString())
     {
@@ -153,7 +161,6 @@ $('.choices').click(function(event){
     }
     else
     {
-        console.log("game over");
         //End game & calculate score
         calculateFinalScore();
     }
@@ -184,27 +191,22 @@ function calculateFinalScore()
     if (score <=2500)
     {
         playerRating = playerRatingArr[0];
-        console.log(playerRating);
     }
     else if (score > 2500 && score <= 5000)
     {
         playerRating = playerRatingArr[1];
-        console.log(playerRating);
     }
     else if (score > 5000 && score <= 10000)
     {
         playerRating = playerRatingArr[2];
-        console.log(playerRating);
     }
     else if (score > 10000 && score <= 20000)
     {
         playerRating = playerRatingArr[3];
-        console.log(playerRating);
     }
     else
     {
         playerRating = playerRatingArr[4];
-        console.log(playerRating);
     }
 
     //Display the user's final score
@@ -231,16 +233,12 @@ function runTimer()
         //set text of h2 span timer element
         $("#timer").text("Time: " + timeLeft);
         timeLeft --;
-        console.log(timeLeft);
     }
     else if (timeLeft <= 0)
     {
         //End game if time runs out
         calculateFinalScore();
-        console.log(timeLeft);
-
     }
-
 };
 
 function stopTimer()
@@ -309,7 +307,7 @@ function loadHighScores()
 
     //loop through the high scores array and pull out each object's information
     $.each(highScores, function(arr, object){
-        console.log(arr, object);
+        // console.log(arr, object);
         createHighScoreListing(object.p_Name, object.p_Score, object.p_Rating);
     });
 };
@@ -347,7 +345,7 @@ function createHighScoreListing(p_Name, p_Score, p_Rating)
     {
         scorePRatingSpan.addClass("bg-dark");
     }
-    
+
         scorePRatingSpan.text(p_Rating);
 
     //append items in the correct order then add to ol in HTML modal
