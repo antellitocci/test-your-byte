@@ -40,8 +40,9 @@ var randomQuestion = 0;
 //initialize variable to track number of questions asked
 var questionsAnswered = 0;
 
-//initialize variable to keep track of score
+//initialize variable to keep track of score & player rating
 var score = 0;
+var playerRatingArr = ['Novice', 'Apprentice', 'Journeyman', 'Master', 'JavaScript Maestro']; 
 
 //initialize variable to keep track of correct / incorrect answers
 var correctAnswers = 0;
@@ -50,8 +51,10 @@ var incorrectAnswers = 0;
 //set initial time
 var startTime = 100;
 var timeLeft = startTime;
-
 var timer;
+
+//initialize high score array
+var highScores = JSON.parse(localStorage.getItem('highScores')) || [];
 
 
 //Set the stage for questions to be served
@@ -159,8 +162,13 @@ function calculateFinalScore()
         $('#timer').text('0');
     }
 
-    //time remaining multiplier
-    $("#exampleModal").modal('show');
+    //show game over modal
+    $("#game-over").modal('show');
+
+    //calculate final score and rating
+    timeBonus = (timeLeft/100) * 25000;//change to be variable based on time remaining
+    score = ((correctAnswers * 1000) - (incorrectAnswers * 250)) + timeBonus;
+    console.log(score);
     displayScore();
 };
 
@@ -190,8 +198,12 @@ function stopTimer()
     clearInterval(timer);
 }
 
-var resetGame = $(".close").click(function(){
-    $("#exampleModal").modal('hide');
+$(".close").click(resetGame);
+
+function resetGame()
+{
+    $("#game-over").modal('hide');
+    $("#save-modal").modal('hide');
     $("#questions").hide();
     $("#intro").show();
     timeLeft = startTime;
@@ -200,24 +212,50 @@ var resetGame = $(".close").click(function(){
     correctAnswers = 0;
     questionsAskedArr = [];
     score = 0;
-});
+}
 
 function displayScore()
 {
-    timeBonus = (timeLeft/100) * 25000;//change to be variable based on time remaining
-    score = ((correctAnswers * 1000) - (incorrectAnswers * 250)) + timeBonus;
-    console.log(score);
+
+    //add rating scale
 
     //display and save scores to local storage
     $("#questions-answered").text(questionsAnswered);
     $('#questions-correct').text(correctAnswers);
-    $('#questions-incorrect').text(questionsAnswered - correctAnswers);
+    $('#questions-incorrect').text(incorrectAnswers);
     $('#time-remaining').text(timeLeft);
-    $('#total-score').text(score);
+    $('#total-score').html("<b>" + score + "</b>");
+    $("#rating").html("<b>Powerhouse</b>");
 }
 
 function viewHighScores()
 {
     //https://www.tutorialrepublic.com/faq/how-to-open-a-bootstrap-modal-window-using-jquery.php#:~:text=Answer%3A%20Use%20the%20modal(',and%20modal('toggle')%20.
 }
+
+
+
+var saveScorePrompt = $("#save-score").click(function(){
+    $("#game-over").modal('hide');
+    $("#save-modal").modal('show');
+    $('#total-score-save').html($('#total-score').html());
+    $("#rating-save").html("<b>Powerhouse</b>");
+})
+
+//save high score to local storage
+$("#save-hs").click(function(){
+    var playerName = $('#initials').val();
+    //get input from input box
+    var highScore = {
+        player: playerName,
+        p_score: score,
+     };
+
+    highScores.push(highScore);
+    
+    localStorage.setItem('highScores', JSON.stringify(highScores));
+
+    resetGame();
+})
+
 //array of high scores to local storage

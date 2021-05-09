@@ -66,57 +66,106 @@
         </div>  
     </main>
  
-  <!-- Modal -->
-  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+    <!-- Game Over Modal -->
+    <div class="modal fade" id="game-over" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="game-over-modal">Game Over! Let's See How You Did!</h5>
+            </div>
+            <div class="modal-body">
+            <div class="row">
+                <div class="col-6">
+                    <h6>Questions Answered:</h6>
+                </div>
+                <div class="col-6" id="questions-answered">
+                </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <h6>Questions Correct:</h6>
+                    </div>
+                    <div class="col-6" id="questions-correct">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <h6>Questions Incorrect:</h6>
+                    </div>
+                    <div class="col-6" id="questions-incorrect">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <h6>Time Remaining:</h6>
+                    </div>
+                    <div class="col-6" id="time-remaining">
+                    </div>
+                </div>
+                <hr />
+                <div class="row">
+                    <div class="col-6">
+                        <h6><b>Total Score:</b></h6>
+                    </div>
+                    <div class="col-6" id="total-score">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <h6><b>Rating:</b></h6>
+                    </div>
+                    <div class="col-6" id="rating">
+                    </div>
+                </div>             
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary close">Exit</button>
+            <button type="button" class="btn btn-primary" id="save-score">Save High Score</button>
+            </div>
         </div>
-        <div class="modal-body">
-          <div class="row">
-              <div class="col-6">
-                  <h6>Questions Answered:</h6>
-              </div>
-              <div class="col-6" id="questions-answered">
-              </div>
-            </div>
-            <div class="row">
-                <div class="col-6">
-                    <h6>Questions Correct:</h6>
-                </div>
-                <div class="col-6" id="questions-correct">
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-6">
-                    <h6>Questions Incorrect:</h6>
-                </div>
-                <div class="col-6" id="questions-incorrect">
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-6">
-                    <h6>Time Remaining:</h6>
-                </div>
-                <div class="col-6" id="time-remaining">
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-6">
-                    <h6>Total Score:</h6>
-                </div>
-                <div class="col-6" id="total-score">
-                </div>
-            </div>           
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary close">Play Again</button>
-          <button type="button" class="btn btn-primary" id="save-changes">Save changes</button>
-        </div>
-      </div>
     </div>
-  </div>
+
+    <!-- Save High Score Modal -->
+    <div class="modal fade" id="save-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="save-score-modal">Save Your High Score</h5>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-6">
+                        <h6><b>Total Score:</b></h6>
+                    </div>
+                    <div class="col-6" id="total-score-save">
+                    </div>
+                <div class="row">
+                    <div class="col-6">
+                        <h6><b>Rating:</b></h6>
+                    </div>
+                    <div class="col-6" id="rating-save">
+                    </div>
+                </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <h6>Enter Your Initials:</h6>
+                    </div>
+                    <div class="col-12">
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" placeholder="Initials" aria-label="Initials" aria-describedby="save-hs" id="initials">
+                            <button class="btn btn-outline-secondary" type="button" id="save-hs">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- <div class="modal-footer">
+            <button type="button" class="btn btn-secondary close">Exit</button>
+            </div> -->
+        </div>
+        </div>
+    </div>
 
     <!--import moment-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ==" crossorigin="anonymous"></script>
