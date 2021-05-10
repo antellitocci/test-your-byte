@@ -37,7 +37,7 @@ Code quiz developed for Butler Boot Camp Challenge #4.
 * If they elect to save their high score, their initials, score, and rating will populate the leaderboard
 * In the high score list, the Raddymaster is the pinnacle of JavaScript knowledge. He holds the maximum score achieveable in the quiz. His initials, AAA, are a nod to arcade games of the past
 * The layout of the web page was built using primarily Bootstrap. There are some in-line styles to override the Bootstrap, but these are minimal
-* Test Your Byte is a nod to [Test Your Might](https://testyourmight.com/), a Mortal Combat forum
+* Test Your Byte is a nod to [Test Your Might](https://testyourmight.com/), a Mortal Kombat forum
 
 ## Access the Project
 
